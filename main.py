@@ -87,14 +87,13 @@ def get_lang_code(name):
 
 def do_translate(text, target):
     target = target.lower().strip()
+    mymap = {'en': 'en-GB', 'it': 'it-IT', 'es': 'es-ES', 'fr': 'fr-FR', 'de': 'de-DE', 'pt': 'pt-PT', 'ar': 'ar-SA'}
+    mm_target = mymap.get(target, target)
     try:
-        return GoogleTranslator(source='auto', target=target).translate(text)
+        return MyMemoryTranslator(source='auto', target=mm_target).translate(text)
     except Exception:
         try:
-            # MyMemory needs codes like en-GB, not en
-            mymap = {'en': 'en-GB', 'it': 'it-IT', 'es': 'es-ES', 'fr': 'fr-FR', 'de': 'de-DE', 'pt': 'pt-PT', 'ar': 'ar-SA'}
-            mm_target = mymap.get(target, target)
-            return MyMemoryTranslator(source='auto', target=mm_target).translate(text)
+            return GoogleTranslator(source='auto', target=target).translate(text)
         except Exception as e:
             return f"Error: {e}"
             
