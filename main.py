@@ -106,7 +106,7 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:
         return
-            if message.author.bot:
+    if message.author.bot:
         return
     if message.content.startswith("!"):
         await bot.process_commands(message)
