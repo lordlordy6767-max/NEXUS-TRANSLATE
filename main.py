@@ -1,12 +1,32 @@
 import os
 import re
+import threading
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from deep_translator import GoogleTranslator
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 load_dotenv()
 
+# ===== FAKE WEBSITE FOR RENDER =====
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"<h1>NEXUS TRANSLATE is Online</h1><p>Bot is running</p>")
+    def log_message(self, format, *args):
+        return
+
+def keep_alive():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    print(f"Fake website running on port {port}")
+
+keep_alive()
+# ===================================
 # ================= CONFIG FROM RENDER ENV =================
 TOKEN = os.getenv("DISCORD_TOKEN")
 
