@@ -4,7 +4,7 @@ import threading
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from deep_translator import GoogleTranslator
+from deep_translator import GoogleTranslator, MyMemoryTranslator
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 load_dotenv()
@@ -88,9 +88,12 @@ def get_lang_code(name):
 def do_translate(text, target):
     try:
         return GoogleTranslator(source='auto', target=target).translate(text)
-    except Exception as e:
-        return f"Error: {e}"
-
+    except Exception:
+        try:
+            return MyMemoryTranslator(source='auto', target=target).translate(text)
+        except Exception as e:
+            return f"Error: {e}"
+            
 def is_owner_id(user_id):
     return user_id in OWNER_IDS
 
